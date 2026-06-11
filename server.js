@@ -1,6 +1,7 @@
 const http = require("http");
 const { v4: uuid } = require("uuid");
 const errorHandler = require("./errorHandler");
+const successHandler = require("./successHandler");
 const headers = require("./headers");
 
 let todos = [
@@ -19,9 +20,7 @@ const reqListener = (req, res) => {
 	});
 
 	if (req.url === "/todos" && req.method === "GET") {
-		res.writeHead(200, headers);
-		res.write(JSON.stringify({ status: "success", data: todos }));
-		res.end();
+		successHandler(res, todos, headers);
 	} else if (req.url === "/todos" && req.method === "POST") {
 		req.on("end", () => {
 			try {
@@ -35,9 +34,7 @@ const reqListener = (req, res) => {
 						completed: completed,
 					};
 					todos.push(todo);
-					res.writeHead(200, headers);
-					res.write(JSON.stringify({ status: "success", data: todos }));
-					res.end();
+					successHandler(res, todos, headers);
 				} else {
 					errorHandler.POST(res, headers);
 				}
@@ -48,9 +45,7 @@ const reqListener = (req, res) => {
 		});
 	} else if (req.url === "/todos" && req.method === "DELETE") {
 		todos = [];
-		res.writeHead(200, headers);
-		res.write(JSON.stringify({ status: "success", data: todos }));
-		res.end();
+		successHandler(res, todos, headers);
 	} else if (req.url === "/todos" && req.method === "PATCH") {
 		req.on("end", () => {
 			try {
@@ -76,9 +71,7 @@ const reqListener = (req, res) => {
 					}
 				});
 
-				res.writeHead(200, headers);
-				res.write(JSON.stringify({ status: "success", data: todos }));
-				res.end();
+				successHandler(res, todos, headers);
 			} catch (error) {
 				errorHandler.POST(res, headers);
 			}
@@ -90,9 +83,7 @@ const reqListener = (req, res) => {
 		// urlTodoId 存在
 		if (index !== -1) {
 			todos = todos.filter((todo) => todo.id !== urlTodoId);
-			res.writeHead(200, headers);
-			res.write(JSON.stringify({ status: "success", data: todos }));
-			res.end();
+			successHandler(res, todos, headers);
 		} else {
 			errorHandler.DELETE(res, headers);
 		}
@@ -111,9 +102,7 @@ const reqListener = (req, res) => {
 						// urlTodoId 存在
 						todos[index].title = title;
 						todos[index].completed = completed;
-						res.writeHead(200, headers);
-						res.write(JSON.stringify({ status: "success", data: todos }));
-						res.end();
+						successHandler(res, todos, headers);
 					} else {
 						errorHandler.POST(res, headers);
 					}
