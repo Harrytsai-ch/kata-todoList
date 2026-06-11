@@ -1,7 +1,7 @@
 const http = require("http");
 const { v4: uuid } = require("uuid");
-const errorHandler = require("./errorHandler");
-const successHandler = require("./successHandler");
+const errorHandler = require("./handler/errorHandler");
+const successHandler = require("./handler/successHandler");
 const headers = require("./headers");
 
 let todos = [
