@@ -12,6 +12,7 @@ let todos = [
 ];
 
 const reqListener = (req, res) => {
+	//上傳才需使用到 data 事件，其他請求不需要
 	let body = "";
 	req.on("data", (chunk) => {
 		body += chunk.toString();
@@ -58,6 +59,7 @@ const reqListener = (req, res) => {
 				updates.forEach((updateTodo) => {
 					const index = todos.findIndex((todo) => todo.id === updateTodo.id);
 					if (index === -1) {
+						//有一筆資料id有問題就丟錯誤，前端就不會更新任何資料
 						throw new Error("Todo Not Found");
 					}
 				});
@@ -131,4 +133,4 @@ const reqListener = (req, res) => {
 };
 
 const server = http.createServer(reqListener);
-server.listen(process.env.PORT || 3005);
+server.listen(process.env.PORT || 3000);
